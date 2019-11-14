@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var configDB = require("./configDB");
+let fs = require('file-system');
 
 var database;
 
@@ -15,7 +16,13 @@ database = new Sequelize(
             min: 0,
             idle: 10000
         },
-        logging: configDB.mysql.logging
+        logging: false, 
+        // when developing it locally, put ssl as true/false
+        dialectOptions: {
+            ssl: {
+                cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
+            }
+        }
     });
 
 var Data = require("./data.model")(database);

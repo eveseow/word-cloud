@@ -1,40 +1,51 @@
-var express     = require ('express');
-var bodyParser  = require('body-parser');
-var dataCtrl  = require('./api/data/data.controller');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+const path = require('path');
 
-var app  = express();
+var bodyParser = require('body-parser');
+var dataCtrl = require('./api/data/data.controller');
+
+const allowedExt = [
+  '.js',
+  '.ico',
+  '.css',
+  '.png',
+  '.jpg',
+  '.woff2',
+  '.woff',
+  '.ttf',
+  '.svg',
+];
+
 var cors = require('cors');
 
-app.use(bodyParser.json()); 
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.get("/api/data", dataCtrl.list);
+app.post("/api/data", dataCtrl.create);
+
+app.use(express.static('../dist/test2'))
+
+app.get('*', (req, res) => {
+  const options = {
+    root: path.join(__dirname, '../dist/test2')
+  }
+
+  if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
+    res.sendFile(path.resolve(`dist/test2/${req.url}`));
+  } else {
+    return res.sendFile('index.html', options)
+  }
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get ("/api/data",  dataCtrl.list);
-app.post("/api/data",  dataCtrl.create);
+
 
 app.use(function (req, resp) {
-    resp.status(440);
-    resp.send("Error File not Found");
+  resp.status(440);
+  resp.send("Error File not Found");
 });
 
-
-var options = {
-    dotfiles: 'ignore',
-    etag: false,
-    extensions: ['htm', 'html'],
-    index: false,
-    maxAge: '1d',
-    redirect: false,
-    setHeaders: function (res, path, stat) {
-      res.set('x-timestamp', Date.now())
-    }
-  }
-  
-  app.use(express.static('dist', options))
-  app.use('/static', express.static('dist'))
-
-// set port and start webserver
-app.listen('3000', function () {
-    console.log("Server running at http://localhost:3000");
-});
-
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
