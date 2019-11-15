@@ -7,6 +7,12 @@ module.exports = {
         username: process.env.MYSQL_USERNAME || "p1748927",
         password: process.env.MYSQL_PASSWORD || "Evelyn37!",
         logging: console.log,
+
+        // host: "localhost",
+        // database: "datadb",
+        // username: "p1748927",
+        // password: "Evelyn37!",
+        // logging: console.log
         
     },
     seed: true

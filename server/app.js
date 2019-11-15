@@ -6,6 +6,21 @@ const path = require('path');
 var bodyParser = require('body-parser');
 var dataCtrl = require('./api/data/data.controller');
 
+var cors = require('cors');
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://localhost:3000/api/data"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+app.get("/api/data", dataCtrl.list);
+app.post("/api/data", dataCtrl.create);
+
 const allowedExt = [
   '.js',
   '.ico',
@@ -17,11 +32,6 @@ const allowedExt = [
   '.ttf',
   '.svg',
 ];
-
-var cors = require('cors');
-
-app.get("/api/data", dataCtrl.list);
-app.post("/api/data", dataCtrl.create);
 
 app.use(express.static('../dist/test2'))
 
@@ -36,12 +46,6 @@ app.get('*', (req, res) => {
     return res.sendFile('index.html', options)
   }
 });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-
-
 
 app.use(function (req, resp) {
   resp.status(440);
