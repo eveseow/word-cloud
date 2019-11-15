@@ -16,14 +16,7 @@ database = new Sequelize(
             min: 0,
             idle: 10000
         },
-        logging: false, 
-        // when developing it locally, put ssl as true/false
-        // ssl: true, 
-        // dialectOptions: {
-        //     ssl: {
-        //         cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
-        //     }
-        // }
+        logging: false,
     });
 
 var Data = require("./data.model")(database);

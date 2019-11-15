@@ -8,7 +8,7 @@ module.exports = function (database) {
             allowNull: false
         }
     }, {
-        tableName: 'data',
+        tableName: 'datas',
         timestamps: true
     });
 }
