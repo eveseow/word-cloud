@@ -11,8 +11,6 @@ var dataCtrl = require('./api/data/data.controller');
 
 var cors = require('cors');
 
-var certificate = fs.fs.readFileSync('./server/BaltimoreCyberTrustRoot.crt.pem')
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -51,6 +49,4 @@ app.use(function (req, resp) {
   resp.send("Error File not Found");
 });
 
-https.createServer({
-  cert: certificate
-}, app).listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -1,23 +1,48 @@
 var Sequelize = require('sequelize');
 var configDB = require("./configDB");
 let fs = require('file-system');
+// require('dotenv').database();
 
-var database;
-
-database = new Sequelize(
+let database = new Sequelize(
     configDB.mysql.database,
     configDB.mysql.username,
     configDB.mysql.password, {
-        host: configDB.mysql.host,
-        dialect: 'mysql',
-        operatorsAliases: false,
-        pool: {
-            max: 5,
-            min: 0,
-            idle: 10000
-        },
-        logging: false,
-    });
+    host: configDB.mysql.host,
+    dialect: 'mysql',
+    operatorsAliases: false,
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    },
+    logging: false,
+})
+
+// let prodOpts = (
+
+//     configDB.mysql.database,
+//     configDB.mysql.username,
+//     configDB.mysql.password, {
+//     host: configDB.mysql.host,
+//     dialect: 'mysql',
+//     operatorsAliases: false,
+//     pool: {
+//         max: 5,
+//         min: 0,
+//         idle: 10000
+//     },
+//     logging: false,
+//     ssl: true,
+//     dialectOptions: {
+//         ssl: {
+//             cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
+//         }
+//     }
+// })
+
+// database = new Sequelize(
+//     process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
+// );
 
 var Data = require("./data.model")(database);
 
@@ -30,5 +55,24 @@ database.sync({
     });
 
 module.exports = {
-    Data: Data
+    Data: Data,
+    "development": {
+        "username": "p1748927",
+        "password": "Evelyn37!",
+        "database": "datadb",
+        "host": "localhost",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "process.env.MYSQL_USERNAME",
+        "password": "process.env.MYSQL_PASSWORD",
+        "database": "process.env.SCHEMA",
+        "host": "process.env.DB_HOST",
+        "dialect": "mysql",
+        "dialectOptions": {
+            ssl: {
+                cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
+            }
+        }
+    }
 }
