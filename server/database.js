@@ -2,7 +2,22 @@ var Sequelize = require('sequelize');
 var configDB = require("./configDB");
 let fs = require('file-system');
 
-let database = new Sequelize(
+let devOpts = new Sequelize(
+    configDB.mysql.database,
+    configDB.mysql.username,
+    configDB.mysql.password, {
+    host: configDB.mysql.host,
+    dialect: 'mysql',
+    operatorsAliases: false,
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    },
+    logging: false,
+})
+
+let prodOpts = new Sequelize(
     configDB.mysql.database,
     configDB.mysql.username,
     configDB.mysql.password, {
@@ -17,36 +32,14 @@ let database = new Sequelize(
     logging: false,
     dialectOptions: {
         ssl: {
-            cert: fs.fs.readFileSync("server/BaltimoreCyberTrustRoot.crt.pem")
+            cert: fs.fs.readFileSync('server/BaltimoreCyberTrustRoot.crt.pem')
         }
-    }
+    }    
 })
 
-// let prodOpts = (
-
-//     configDB.mysql.database,
-//     configDB.mysql.username,
-//     configDB.mysql.password, {
-//     host: configDB.mysql.host,
-//     dialect: 'mysql',
-//     operatorsAliases: false,
-//     pool: {
-//         max: 5,
-//         min: 0,
-//         idle: 10000
-//     },
-//     logging: false,
-//     ssl: true,
-//     dialectOptions: {
-//         ssl: {
-//             cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
-//         }
-//     }
-// })
-
-// database = new Sequelize(
-//     process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
-// );
+let database = new Sequelize(
+    process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
+);
 
 var Data = require("./data.model")(database);
 
