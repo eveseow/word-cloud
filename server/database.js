@@ -1,7 +1,6 @@
 var Sequelize = require('sequelize');
 var configDB = require("./configDB");
 let fs = require('file-system');
-// require('dotenv').database();
 
 let database = new Sequelize(
     configDB.mysql.database,
@@ -16,6 +15,11 @@ let database = new Sequelize(
         idle: 10000
     },
     logging: false,
+    dialectOptions: {
+        ssl: {
+            cert: fs.fs.readFileSync("server/BaltimoreCyberTrustRoot.crt.pem")
+        }
+    }
 })
 
 // let prodOpts = (
@@ -56,23 +60,23 @@ database.sync({
 
 module.exports = {
     Data: Data,
-    "development": {
-        "username": "p1748927",
-        "password": "Evelyn37!",
-        "database": "datadb",
-        "host": "localhost",
-        "dialect": "mysql"
-    },
-    "production": {
-        "username": "process.env.MYSQL_USERNAME",
-        "password": "process.env.MYSQL_PASSWORD",
-        "database": "process.env.SCHEMA",
-        "host": "process.env.DB_HOST",
-        "dialect": "mysql",
-        "dialectOptions": {
-            ssl: {
-                cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
-            }
-        }
-    }
+    // "development": {
+    //     "username": "p1748927",
+    //     "password": "Evelyn37!",
+    //     "database": "datadb",
+    //     "host": "localhost",
+    //     "dialect": "mysql"
+    // },
+    // "production": {
+    //     "username": "process.env.MYSQL_USERNAME",
+    //     "password": "process.env.MYSQL_PASSWORD",
+    //     "database": "process.env.SCHEMA",
+    //     "host": "process.env.DB_HOST",
+    //     "dialect": "mysql",
+    //     "dialectOptions": {
+    //         ssl: {
+    //             cert: fs.fs.readFileSync("./server/BaltimoreCyberTrustRoot.crt.pem")
+    //         }
+    //     }
+    // }
 }
