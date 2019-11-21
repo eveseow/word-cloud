@@ -17,7 +17,7 @@ let devOpts = new Sequelize (
     logging: false,
 })
 
-let prodOpts = (
+let prodOpts = new Sequelize (
     configDB.mysql.database,
     configDB.mysql.username,
     configDB.mysql.password, {
