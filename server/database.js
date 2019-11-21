@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var configDB = require("./configDB");
 let fs = require('file-system');
 
-let devOpts = new Sequelize(
+let devOpts = new Sequelize (
     configDB.mysql.database,
     configDB.mysql.username,
     configDB.mysql.password, {
@@ -17,7 +17,7 @@ let devOpts = new Sequelize(
     logging: false,
 })
 
-let prodOpts = new Sequelize(
+let prodOpts = (
     configDB.mysql.database,
     configDB.mysql.username,
     configDB.mysql.password, {
@@ -37,9 +37,7 @@ let prodOpts = new Sequelize(
     }    
 })
 
-let database = new Sequelize(
-    process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
-);
+let database = process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
 
 var Data = require("./data.model")(database);
 
