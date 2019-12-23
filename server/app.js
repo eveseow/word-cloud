@@ -1,52 +1,34 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
-const path = require('path');
+var express     = require ('express');
+var bodyParser  = require('body-parser');
+var wordCtrl    = require('./api/word/word.controller');
+var userCtrl    = require('./api/user/user.controller');
+var sessionCtrl = require('./api/session/session.controller');
 
-let fs = require('file-system');
-let https = require('http');
-
-var bodyParser = require('body-parser');
-var dataCtrl = require('./api/data/data.controller');
-
+var app  = express();
 var cors = require('cors');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cors());
 
-app.get("/api/data", dataCtrl.list);
-app.post("/api/data", dataCtrl.create);
+app.get ("/api/word",  wordCtrl.list);
+app.post("/api/word",  wordCtrl.create);
+app.get ("/api/word/:session_id",  wordCtrl.listSession);
 
-const allowedExt = [
-  '.js',
-  '.ico',
-  '.css',
-  '.png',
-  '.jpg',
-  '.woff2',
-  '.woff',
-  '.ttf',
-  '.svg',
-];
+app.get ("/api/user",  userCtrl.list);
+app.post("/api/user",  userCtrl.create);
 
-app.use(express.static('../dist/test2'))
-
-app.get('*', (req, res) => {
-  const options = {
-    root: path.join(__dirname, '../dist/test2')
-  }
-
-  if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
-    res.sendFile(path.resolve(`dist/test2/${req.url}`));
-  } else {
-    return res.sendFile('index.html', options)
-  }
-});
+app.get ("/api/session", sessionCtrl.list);
+app.post("/api/session", sessionCtrl.create);
+app.put('/api/session/:session_id', sessionCtrl.update);
 
 app.use(function (req, resp) {
-  resp.status(440);
-  resp.send("Error File not Found");
+    resp.status(440);
+    resp.send("Error File not Found");
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+// set port and start webserver
+app.listen('3000', function () {
+    console.log("Server running at http://localhost:3000");
+});
+
