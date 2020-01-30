@@ -23,6 +23,11 @@ module.exports = function (database) {
             primaryKey: false,
             allowNull: false,
         },
+        question : {
+            type: Sequelize.STRING(2500),
+            primaryKey: false,
+            allowNull: false,
+        },
         session_category : {
             type: Sequelize.STRING(2000),
             primaryKey: false,

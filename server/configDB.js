@@ -9,5 +9,5 @@ module.exports = {
         logging: console.log
         
     },
-    seed: true
+    seed: false
 }

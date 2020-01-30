@@ -1,26 +1,21 @@
 var Sequelize = require("sequelize");
 
 module.exports = function (database) {
-    return database.define('word', {
-        term_id : {
+    return database.define('senti', {
+        senti_id : {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
         },
-        session_id : {
+        term_id : {
             type: Sequelize.INTEGER,
             primaryKey: false,
             allowNull: false,
             references: {
-                model: "sessions",
-                key: "session_id"
+                model: "words",
+                key: "term_id"
             }
-        },
-        term : {
-            type: Sequelize.STRING(1000),
-            primaryKey: false,
-            allowNull: false
         },
         prediction : {
             type: Sequelize.STRING(10),
@@ -28,7 +23,7 @@ module.exports = function (database) {
             allowNull: false
         },
         confidence: {
-            type: Sequelize.FLOAT,
+            type: Sequelize.DECIMAL,
             primaryKey: false,
             allowNull: false
         },
@@ -39,7 +34,7 @@ module.exports = function (database) {
             allowNull: false
         }
     }, {
-        tableName: 'words',
+        tableName: 'sentiments',
         timestamps: false
     });
 }

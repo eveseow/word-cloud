@@ -52,6 +52,7 @@ let database = process.env.ENVIRONMENT === "production" ? prodOpts : devOpts
 var Word = require("./models/word.model")(database);
 var User = require("./models/user.model")(database);
 var Session = require("./models/session.model")(database);
+var Senti = require("./models/sentiment.model")(database);
 
 Session.hasMany(Word, {
     foreignKey: "session_id"
@@ -68,5 +69,6 @@ database.sync({
 module.exports = {
     Word: Word,
     User: User,
-    Session: Session
+    Session: Session,
+    Senti: Senti
 }
