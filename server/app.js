@@ -1,4 +1,7 @@
 var express = require('express');
+const port = process.env.PORT || 8080;
+const path = require('path');
+
 var bodyParser = require('body-parser');
 var wordCtrl = require('./api/word/word.controller');
 var userCtrl = require('./api/user/user.controller');
@@ -27,7 +30,31 @@ app.post("/api/session", sessionCtrl.create);
 app.get("/api/sentiment", sentiCtrl.list);
 app.post("/api/sentiment", sentiCtrl.create);
 
+const allowedExt = [
+    '.js',
+    '.ico',
+    '.css',
+    '.png',
+    '.jpg',
+    '.woff2',
+    '.woff',
+    '.ttf',
+    '.svg',
+  ];
 
+app.use(express.static('../dist/project-ai-lab'))
+
+app.get('*', (req, res) => {
+  const options = {
+    root: path.join(__dirname, '../dist/project-ai-lab')
+  }
+
+  if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
+    res.sendFile(path.resolve(`dist/project-ai-lab/${req.url}`));
+  } else {
+    return res.sendFile('index.html', options)
+  }
+});
 
 app.use(function (req, resp) {
     resp.status(440);
@@ -35,7 +62,8 @@ app.use(function (req, resp) {
 });
 
 // set port and start webserver
-app.listen('3000', function () {
-    console.log("Server running at http://localhost:3000");
+app.listen('8080', function () {
+    console.log("Server running at http://localhost:8080");
 });
 
+app.listen(port, () => console.log(`Example app listening on port ${port}!`)) 
