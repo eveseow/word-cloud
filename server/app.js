@@ -62,8 +62,8 @@ app.use(function (req, resp) {
 });
 
 // set port and start webserver
-app.listen('8080', function () {
-    console.log("Server running at http://localhost:8080");
-});
+// app.listen('8000', function () {
+//     console.log("Server running at http://localhost:8000");
+// });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`)) 
